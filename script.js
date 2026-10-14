@@ -11,7 +11,13 @@ function render (html) {
   - If they cancel or leave blank, show a friendly message
 */
 function greet () {
-  // TODO: Write your code here
+  const userName = prompt('What is your name?')
+  if (!userName || !userName.trim()) {
+    render("<p class= 'text-muted'> No name entered. </p>")
+    return
+  } else{ 
+    render(`<p> Hello ${userName}! </p>`)
+  }
 }
 
 /* 
@@ -23,7 +29,20 @@ function greet () {
   - Display the average AND the list of numbers
 */
 function averageNumbers () {
-  // TODO: Write your code here
+  const nums = prompt('Enter a list of numbers separated by commas')
+  if (!nums){
+    render("<p class= 'text-muted'> No numbers entered. </p>")
+    return
+  }
+
+  const numArray = nums
+      .split(',')
+      .map(n => parseFloat(n.trim()))
+      .filter(n => !isNaN(n))
+  
+  const sum = numArray.reduce((a,b) => a + b, 0)
+ 
+  const avg = sum / numArray.length
 }
 
 /* 
@@ -72,7 +91,7 @@ document.getElementById('btnClear').addEventListener('click', clearOutput)
   ------------------------------------------
   Add 4 new functions here, each with its own button in index.html:
   
-  1) Change the page title text to something new.
+  DONE: Change the page title text to something new.
   2) Each time you press the button, the output text color cycles through a few choices (red, green, orange, etc.).
   3) Press the button to change the background color of the output box to a random color.
   4) Ask the user for a number and display that number doubled.
