@@ -1,5 +1,5 @@
 // Helper function: writes any HTML into the #out div
-function render (html) {
+function render(html) {
   document.getElementById('out').innerHTML = html
 }
 
@@ -10,12 +10,12 @@ function render (html) {
   - If they type something, display "Hello, NAME!"
   - If they cancel or leave blank, show a friendly message
 */
-function greet () {
+function greet() {
   const userName = prompt('What is your name?')
   if (!userName || !userName.trim()) {
     render("<p class= 'text-muted'> No name entered. </p>")
     return
-  } else{ 
+  } else {
     render(`<p> Hello ${userName}! </p>`)
   }
 }
@@ -28,21 +28,26 @@ function greet () {
   - Calculate the average
   - Display the average AND the list of numbers
 */
-function averageNumbers () {
+function averageNumbers() {
   const nums = prompt('Enter a list of numbers separated by commas')
-  if (!nums){
+  if (!nums) {
     render("<p class= 'text-muted'> No numbers entered. </p>")
     return
   }
 
   const numArray = nums
-      .split(',')
-      .map(n => parseFloat(n.trim()))
-      .filter(n => !isNaN(n))
-  
-  const sum = numArray.reduce((a,b) => a + b, 0)
- 
+    .split(',')
+    .map(n => parseFloat(n.trim()))
+    .filter(n => !isNaN(n))
+
+  const sum = numArray.reduce((a, b) => a + b, 0)
+
   const avg = sum / numArray.length
+
+  const list = numArray.map(n => `<li class = "list-group-item">${n}</li>`).join('')
+
+  render(`<p> Average: <strong>${avg}</strong></p>
+        <ul class = "list-group"> ${list}</ul>`)
 }
 
 /* 
@@ -52,9 +57,24 @@ function averageNumbers () {
   - Decide whether it's morning, afternoon, or evening
   - Display a message like "Good morning!" 
 */
-function timeOfDay () {
-  // TODO: Write your code here
+function timeOfDay() {
+  const h = new Date().getHours()
+  let msg = ''
+
+  if (h < 12) {
+    msg = 'Good morning!'
+  } else if (h > 12 && h < 15) {
+    msg = 'Good afternoon!'
+  } else if (h > 15 && h < 18) {
+    msg = 'Good evening!'
+  }
+  else {
+    msg = 'Good night!'
+  }
+
+  render(`<p> ${msg} </p>`)
 }
+
 
 /* 
   Function 4 — randomBetween()
@@ -64,7 +84,7 @@ function timeOfDay () {
   - Display the result
   - Handle invalid input (like blanks or min >= max)
 */
-function randomBetween () {
+function randomBetween() {
   // TODO: Write your code here
 }
 
@@ -74,8 +94,8 @@ function randomBetween () {
   - Clear whatever is inside #out
   - Replace it with a placeholder message like "Output cleared."
 */
-function clearOutput () {
-  // TODO: Write your code here
+function clearOutput() {
+  render("<p class= 'text-muted'> Output cleared. </p>")
 }
 
 // ---- Event listeners for the demo buttons ----
@@ -84,6 +104,18 @@ document.getElementById('btnAvg').addEventListener('click', averageNumbers)
 document.getElementById('btnTime').addEventListener('click', timeOfDay)
 document.getElementById('btnRandom').addEventListener('click', randomBetween)
 document.getElementById('btnClear').addEventListener('click', clearOutput)
+
+const colors = ['red', 'green', 'orange', 'blue', 'purple']
+let currentIndex = 0
+
+const textBox = document.getElementById('text-output')
+const colorButton = document.getElementById('btnGreet', 'btnAvg', 'btnTime', 'btnRandom', 'btnClear')
+colorButton.addEventListener("click", () => {
+  currentIndex = (currentIndex + 1) % colors.length;
+  const newColor = colors[currentIndex];
+  textOutput.style.color = newColor;
+  colorButton.style.backgroundColor = newColor;
+});
 
 /* 
   ------------------------------------------
@@ -94,7 +126,7 @@ document.getElementById('btnClear').addEventListener('click', clearOutput)
   DONE: Change the page title text to something new.
   2) Each time you press the button, the output text color cycles through a few choices (red, green, orange, etc.).
   3) Press the button to change the background color of the output box to a random color.
-  4) Ask the user for a number and display that number doubled.
+  4) angry mode 
   
   Write each function below, and don’t forget to connect each one 
   to a new button in index.html using addEventListener.
