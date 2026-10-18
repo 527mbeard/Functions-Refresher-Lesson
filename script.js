@@ -1,6 +1,21 @@
+const outputColors = ['red', 'green', 'orange', 'blue', 'purple']
+let outputColorIndex = -1
+
+function applyOutputTextColor() {
+  if (outputColorIndex === -1) return
+
+  const output = document.getElementById('out')
+  const color = outputColors[outputColorIndex]
+  output.style.setProperty('color', color, 'important')
+  output.querySelectorAll('*').forEach(element => {
+    element.style.setProperty('color', color, 'important')
+  })
+}
+
 // Helper function: writes any HTML into the #out div
 function render(html) {
   document.getElementById('out').innerHTML = html
+  applyOutputTextColor()
 }
 
 /* 
@@ -104,18 +119,14 @@ document.getElementById('btnAvg').addEventListener('click', averageNumbers)
 document.getElementById('btnTime').addEventListener('click', timeOfDay)
 document.getElementById('btnRandom').addEventListener('click', randomBetween)
 document.getElementById('btnClear').addEventListener('click', clearOutput)
+document.getElementById('btnBackground').addEventListener('click', changeBackground)
 
-const colors = ['red', 'green', 'orange', 'blue', 'purple']
-let currentIndex = 0
+const topActionButtonIds = ['btnGreet', 'btnAvg', 'btnTime', 'btnRandom', 'btnClear']
+topActionButtonIds.forEach(id => {
+  document.getElementById(id).addEventListener('click', cycleOutputTextColor)
+})
 
-const textBox = document.getElementById('text-output')
-const colorButton = document.getElementById('btnGreet', 'btnAvg', 'btnTime', 'btnRandom', 'btnClear')
-colorButton.addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % colors.length;
-  const newColor = colors[currentIndex];
-  textOutput.style.color = newColor;
-  colorButton.style.backgroundColor = newColor;
-});
+
 
 /* 
   ------------------------------------------
@@ -123,11 +134,36 @@ colorButton.addEventListener("click", () => {
   ------------------------------------------
   Add 4 new functions here, each with its own button in index.html:
   
-  DONE: Change the page title text to something new.
-  2) Each time you press the button, the output text color cycles through a few choices (red, green, orange, etc.).
-  3) Press the button to change the background color of the output box to a random color.
-  4) angry mode 
+  1) DONE: Change the page title text to something new.
+  2) DONE: Each time you press the button, the output text color cycles through a few choices (red, green, orange, etc.).
+  3) DONE: Press the button to change the background color of the output box to a random color.
+  4) DONE: Angry mode 
   
   Write each function below, and don’t forget to connect each one 
   to a new button in index.html using addEventListener.
 */
+
+// 2)
+function cycleOutputTextColor() {
+  outputColorIndex = (outputColorIndex + 1) % outputColors.length
+  applyOutputTextColor()
+}
+
+// 3)
+function changeBackground() {
+  const color = `#${Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0')}`
+  document.getElementById('out').style.backgroundColor = color
+}
+
+//4)
+function toggleAngryMode() {
+  const isAngry = document.body.classList.toggle('angry-mode')
+
+  document.title = isAngry ? 'Runtime Rumble: Bugged Out!' : 'Random Buttons'
+  document.querySelector('header h1').textContent =
+    isAngry ? '⚠ CODE CHAOS: THE BUG STRIKES ⚠' : '🍂 Random Buttons'
+  document.getElementById('btnAngry').textContent =
+    isAngry ? 'Exit Code Chaos' : 'Angry Mode'
+}
+
+document.getElementById('btnAngry').addEventListener('click', toggleAngryMode)
